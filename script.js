@@ -1,11 +1,25 @@
+var xhReq = new XMLHttpRequest();
+xhReq.open("GET", "<?php echo site_url('item_controller/displayListItem'); ?>", false);
+xhReq.send(null);
+var jsonObject = JSON.parse(xhReq.responseText);
+
 $(document).ready(function () {
     $("#grid").kendoGrid({
         dataSource: {
-            type: "odata",
-            transport: {
-                read: "//demos.telerik.com/kendo-ui/service/Northwind.svc/Customers"
+            data: jsonObject,
+            schema: {
+                model: {
+                    fields: {
+                        name_id: { type: "number" },
+                        name: { type: "string" },
+                        title: { type: "string" }
+                    }
+                }
             },
-            pageSize: 20
+            pageSize: 20,
+            serverPaging: true,
+            serverfiltering: true,
+            serverSorting: true
         },
         height: 550,
         groupable: true,
@@ -16,21 +30,15 @@ $(document).ready(function () {
             buttonCount: 5
         },
         columns: [{
-            template: "<div class='customer-photo'" +
-                            "style='background-image: url(../content/web/Customers/#:data.CustomerID#.jpg);'></div>" +
-                        "<div class='customer-name'>#: ContactName #</div>",
-            field: "ContactName",
-            title: "Contact Name",
+            field: "NameID",
+            title: "ID"
+        }, {
+            field: "name",
+            title: "Name",
             width: 240
         }, {
-            field: "ContactTitle",
-            title: "Contact Title"
-        }, {
-            field: "CompanyName",
-            title: "Company Name"
-        }, {
-            field: "Country",
-            width: 150
+            field: "title",
+            title: "Title"
         }]
     });
 });
