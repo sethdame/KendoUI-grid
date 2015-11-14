@@ -1,3 +1,5 @@
+// NOT WORKING
+// DONT USE
 app.get('/index', function (req,res) {
     var lock = 2;
     var user_array = [];
